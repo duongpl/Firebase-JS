@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food Recipe</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../../plugins/toastr/toastr.min.css">
+  <style>
+    .dt-body-center{
+      text-align: center;
+    }
+    td{
+      max-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .table td{
+      max-height: 35px; /* or whatever height you need to make them all consistent */
+    }
+    .customabtn{
+      border: 1px solid #16854d;
+      padding: 8px 20px;
+      text-decoration: none;
+      cursor: pointer;
+      color: #ffffff !important;
+      border-radius: 5px;
+      background-color: #16854d;
+      text-align: center;
+    }
+    .customabtn2{
+      border: 1px solid #16854d;
+      padding: 5px 16px;
+      text-decoration: none;
+      cursor: pointer;
+      color: #ffffff !important;
+      border-radius: 5px;
+      background-color: #16854d;
+      text-align: center;
+      position: absolute;
+    }
+    a:hover{
+      /* color: #ffffff; */
+      background-color: #0b5530;
+    }
+    .csicon{
+      margin-top: 36px;
+    }
+    .customrow{
+      margin-bottom: 10px;
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Food Repice</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        
+
+          <li class="nav-item menu-open">
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../tables/food.html" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Món ăn</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu-open">
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../tables/category.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Danh mục</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu-open">
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../tables/ingredient.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Nguyên liệu</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="content-wrapper">
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Quản lí món ăn</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- <button type="button" class="btn btn-block bg-gradient-primary" data-toggle="modal" data-target="#modal-ingredients">checking</button> -->
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body" style="padding-bottom: 0px !important">
+                <div class="row">
+                  <div class="col-2">
+                    <button type="button" class="btn btn-block bg-gradient-primary" data-toggle="modal" data-target="#modal-addFood">Thêm món ăn</button>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                   <thead>
+                  <tr>
+                    <!-- <th>Category ID</th> -->
+                    <th>Loại danh mục</th>
+                    <th>Tên</th>
+                    <th>Đường dẫn ảnh</th>
+                    <th>Bước làm</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+
+  <div class="modal fade" id="modal-ingredients">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Nguyên liệu</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label>Nguyên liệu</label>
+                </div>
+                <div class="col-lg-5">
+                  <label>Khối lượng</label>
+                </div>
+              </div>
+              <div id="addcontrol">
+                <!-- <div class="row customrow" id="row0">
+                  <div class="col-lg-6">
+                    <select id="in0" class="form-control"></select>
+                  </div>
+                  <div class="col-lg-5">
+                    <input type="text" id="amount0" class="form-control">
+                  </div>
+                  <div class="col-lg-1">
+                    <a href="#" class="customabtn2" onclick="removeRow('#row0')">
+                      <i class="fas fa-minus" style="color: #ffffff;"></i>
+                    </a>   
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-1">
+              <a href="#" class="customabtn" onclick="bonusRow()">
+                <i class="fas fa-plus" style="color: #ffffff;"></i>
+              </a>            
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="updateIngredient()">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="modal-addFood">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Thêm món ăn</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="update-foodid">Category</label>
+            <select class="form-control" id="add-categoryid"></select>
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Name</label>
+            <input type="text" class="form-control" id="add-name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Image Url</label>
+            <div class="custom-file">
+              <input type="file" class="files" id="add-image">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Step</label>
+            <textarea class="form-control" id="add-step" rows="6" placeholder="Step..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="addFood()">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-updateFood">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Chỉnh sửa món ăn</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="update-foodid">Category</label>
+            <select class="form-control" id="update-categoryid"></select>
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Name</label>
+            <input type="text" class="form-control" id="update-name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Image Url</label>
+            <div class="custom-file">
+              <input type="file" class="files" id="update-image">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="update-foodid">Step</label>
+            <textarea class="form-control" id="update-step" rows="6" placeholder="Step..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="updateFood()">Lưu thay đổi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-deleteFood">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa món ăn</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa bỏ món ăn này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="deleteFood()">Xác nhận</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <aside class="control-sidebar control-sidebar-dark">
+  </aside>
+  
+</div>
+
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../dist/js/adminlte.min.js"></script>
+<script src="../../dist/js/demo.js"></script>
+<script src="../../plugins/toastr/toastr.min.js"></script>
+<script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-storage.js"></script>
+<script>
+
+let arrIngre = [];
+let arrindexIngre = [];
+let numIndexIngre;
+  async function addIngre(id){
+    numIndexIngre = 0;
+    idtemp = id;
+    arrindexIngre.forEach(function(doc){
+      $('#row-'+doc).remove();
+    });
+    await getIngredientsByFood(id);
+    arrindexIngre.forEach(async function(doc){
+      $('#addcontrol').append("<div class=\"row customrow\" id=\"row-"+doc+"\"><div class=\"col-lg-6\"><select id=\"in-"+doc+"\" class=\"form-control\"></select></div><div class=\"col-lg-5\"><input type=\"text\" id=\"amount-"+doc+"\" class=\"form-control\"></div><div class=\"col-lg-1\"><a href=\"#\" class=\"customabtn2\" onclick=\"removeRow("+doc+")\"><i class=\"fas fa-minus\" style=\"color:#ffffff;\"></i></a></div></div>");
+      document.getElementById('amount-'+doc).value = arrIngre[doc][3];
+      await getCategoriesForIngre('#in-'+doc);
+      document.getElementById('in-'+doc).value = arrIngre[doc][2];
+    });
+    $('#modal-ingredients').modal('show');
+  }
+
+  async function updateIngredient(){
+    for(let i = 0 ; i< arrIngre.length; i++){
+      if(arrindexIngre.includes(i)){  
+        await updateIngredientInFood(i,arrIngre[i][0]);
+        arrindexIngre = arrindexIngre.filter(function(e) { return e !== i });
+        $('#row-'+i).remove();
+      }else{
+        deleteIngredientInFood(arrIngre[i][0]);
+      }
+    }
+    arrindexIngre.forEach(async function(doc){
+      await addIngredientsInFood(doc);
+      $('#row-'+doc).remove();
+    });
+    $('#modal-ingredients').modal('hide');
+    toastr.success('Cập nhật thành công.');
+  }
+
+  function bonusRow(){
+    numIndexIngre = numIndexIngre + 1;
+    arrindexIngre.push(numIndexIngre);
+    $('#addcontrol').append("<div class=\"row customrow\" id=\"row-"+numIndexIngre+"\"><div class=\"col-lg-6\"><select id=\"in-"+numIndexIngre+"\" class=\"form-control\"></select></div><div class=\"col-lg-5\"><input type=\"text\" id=\"amount-"+numIndexIngre+"\" class=\"form-control\"></div><div class=\"col-lg-1\"><a href=\"#\" class=\"customabtn2\" onclick=\"removeRow("+numIndexIngre+")\"><i class=\"fas fa-minus\" style=\"color:#ffffff;\"></i></a></div></div>");
+    getCategoriesForIngre('#in-'+numIndexIngre);
+  }
+
+  function removeRow(id){
+    $('#row-'+id).remove();
+    arrindexIngre = arrindexIngre.filter(function(e) { return e !== id });
+  }
+
+  function getIngredientsByFood(id){
+    arrIngre = [];
+    arrindexIngre = [];
+    return new Promise((resolve,reject) => {
+      const db = firebase.firestore();
+      db.collection("foodingre")
+      .where("foodid","==",id)
+      .get()
+      .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            let ing = [doc.id,doc.data().foodid,doc.data().ingreid,doc.data().amount];
+            arrindexIngre.push(arrIngre.length);
+            arrIngre.push(ing);
+          });
+          numIndexIngre = arrindexIngre.length;
+          resolve();
+      })
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });
+    });
+  }
+
+  function getCategoriesForIngre(id){
+    return new Promise((resolve,reject) =>{
+      const db = firebase.firestore();
+      db.collection("ingredients")
+      .get()
+      .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            $(id).append("<option value='"+doc.id+"'>"+doc.data().name+"</option>");
+          });
+          resolve();
+      })
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });
+    });
+  }
+
+  var firebaseConfig = {
+      apiKey: 'AIzaSyAbOUYpdQzNBtqpeViWy13ERuQ551TbdzE',
+      authDomain: 'project-7fa64.firebaseapp.com',
+      databaseURL: 'https://project-7fa64.firebaseio.com',
+      projectId: 'project-7fa64',
+      storageBucket: 'project-7fa64.appspot.com',
+      messagingSenderId: '554693901240',
+      appId: '1:554693901240:web:24ecc623cf412c5bb5ad4d'
+  };
+
+    $('.toastrDefaultSuccess').click(function() {
+      toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+    });
+    $('.toastrDefaultInfo').click(function() {
+      toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+    });
+    $('.toastrDefaultError').click(function() {
+      toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+    });
+
+  $(function () {
+    firebase.initializeApp(firebaseConfig);
+    getCategories();
+    getFoods();
+  });
+
+
+let idtemp;
+let imgtemp;
+
+
+  function modalIngredient(id){
+    idtemp = id;
+    getFoodByID(idtemp);
+    $('#modal-ingredients').modal('show');
+  }
+
+  function modalUpdateFood(id){
+    idtemp = id;
+    getFoodByID(idtemp);
+    $('#modal-updateFood').modal('show');
+  }
+  function modalDeleteFood(id){
+    idtemp = id;
+    getImgByIDForDelete(idtemp);
+    $('#modal-deleteFood').modal('show');
+  }
+
+  $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      "columns": [
+      { "width": "15%",className: 'dt-body-center' },
+      { className: 'dt-body-center' },
+        { "width": "15%",className: 'dt-body-center' },
+        null,
+        { className: 'dt-body-center' },
+        { className: 'dt-body-center' },
+        { className: 'dt-body-center' }
+      ]
+    });
+
+  function getCategories(){
+    const db = firebase.firestore();
+    db.collection("category")
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          $("#update-categoryid").append("<option value='"+doc.id+"'>"+doc.data().name+"</option>");
+          $("#add-categoryid").append("<option value='"+doc.id+"'>"+doc.data().name+"</option>");
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
+
+  function getFoodByID(id){
+    const db = firebase.firestore();
+    db.collection("food")
+    .doc(id)
+    .get()
+    .then(function(doc) {
+        document.getElementById('update-categoryid').value = doc.data().category_type;
+        document.getElementById('update-name').value = doc.data().name;
+        document.getElementById('update-step').value = doc.data().step;
+        imgtemp = doc.data().img;
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
+
+  function getImgByIDForDelete(id){
+    const db = firebase.firestore();
+    db.collection("food")
+    .doc(id)
+    .get()
+    .then(function(doc) {
+        imgtemp = doc.data().img;
+        console.log(imgtemp);
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
+
+function getCategoryNameByID(id){
+    return new Promise((resolve,reject) => {
+      const db = firebase.firestore();
+      db.collection("category")
+      .doc(id)
+      .get()
+      .then(function(doc) {
+        resolve(doc.data().name);
+      })
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });
+    });
+  }
+
+  function getFoods(){
+    const table = $('#example1').DataTable();
+    const db = firebase.firestore();
+    db.collection("food")
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(async function(doc) {
+          let category_name = await getCategoryNameByID(doc.data().category_type);
+          let arr = [category_name,doc.data().name,doc.data().img,doc.data().step,"<a href=\"#\" class=\"customabtn\" onclick=\"modalUpdateFood('"+doc.id+"')\" >Chỉnh sửa</a>","<a href=\"#\" class=\"customabtn\"  onclick=\"modalDeleteFood('"+doc.id+"')\">Xóa</a>","<a href=\"#\" class=\"customabtn\"  onclick=\"addIngre('"+doc.id+"')\">Nguyên liệu</a>"];
+          table.row.add(arr).draw();
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
+
+  function uploadimg(img){
+    const storage = firebase.storage().ref();
+    const metadata = {
+      contentType: 'image/jpg',
+    };
+    storage.child('food/' + img.name).put(img,metadata).then(function(s){
+      console.log('success');
+    }).catch(function (error) {
+        console.error('Error adding document: ', error);
+      });
+  }
+
+  function deleteimg(img){
+    const storage = firebase.storage().ref();
+    let desertRef = storage.child('food/' + img);
+    desertRef.delete().then(function() {
+      console.log('success');
+    }).catch(function(error) {
+      console.error('Error deleting document: ', error);
+    });
+  }
+
+  function addFood(){
+    const table = $('#example1').DataTable();
+    let categoryid = document.getElementById('add-categoryid').value;
+    let name = document.getElementById('add-name').value;
+    let img = document.getElementById('add-image').value;
+    let step = document.getElementById('add-step').value.trim();
+    if(categoryid === '' || name === '' || img === '' || step === ''){
+      toastr.error('Vui lòng nhập đủ các thông tin món ăn.');
+      return false;
+    }
+    let refimg = document.querySelector('#add-image').files[0];
+    const db = firebase.firestore();
+    db.collection('food').add({
+      category_type : categoryid,
+      name: name,
+      img: refimg.name,
+      step : step
+    })
+      .then(async function (docRef) {
+        toastr.success('Thêm thành công.');
+        uploadimg(refimg);
+        $('#modal-addFood').modal('hide');
+        let category_name = await getCategoryNameByID(categoryid);
+        let arr = [category_name,name,refimg.name,step,"<a href=\"#\" class=\"customabtn\" onclick=\"modalUpdateFood('"+docRef.id+"')\" >Chỉnh sửa</a>","<a href=\"#\" class=\"customabtn\" onclick=\"modalDeleteFood('"+docRef.id+"')\">Xóa</a>","<a href=\"#\" class=\"customabtn\"  onclick=\"addIngre('"+docRef.id+"')\">Nguyên liệu</a>"];
+        table.row.add(arr).draw();
+      })
+      .catch(function (error) {
+        toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+      });
+  }
+
+  function deleteFood(){
+    const table = $('#example1').DataTable();
+    const db = firebase.firestore();
+    db.collection("food").doc(idtemp).delete().then(function() {
+      toastr.success('Xóa thành công.');
+      deleteimg(imgtemp);
+      // deleteIngredientInFoodbyFoodID(idtemp);
+      table.clear().draw();
+      getFoods();
+    }).catch(function(error) {
+      toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+    });
+    $('#modal-deleteFood').modal('hide');
+  }
+
+  function addIngredientsInFood(index){
+    return new Promise((resolve,reject) => {
+      let ingreid = document.getElementById('in-'+index).value;
+      let amount = document.getElementById('amount-'+index).value;
+      if(amount === ''){
+        toastr.error('Vui lòng nhập đủ các thông tin.');
+        return false;
+      }
+      const db = firebase.firestore();
+      db.collection('foodingre').add({
+        amount : amount,
+        ingreid : ingreid,
+        foodid : idtemp
+      })
+        .then(function (docRef) {
+          resolve();
+        })
+        .catch(function (error) {
+          toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+        });
+    });
+  }
+
+  function deleteIngredientInFoodbyDoc(id){
+    const db = firebase.firestore();
+    db.collection("foodingre").doc(id).delete().then(function() {
+      // toastr.success('Xóa thành công.');
+    }).catch(function(error) {
+      toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+    });
+  }
+  function deleteIngredientInFoodbyFoodID(id){
+    const db = firebase.firestore();
+    db.collection("foodingre").where("foodid","==",id).delete().then(function() {
+      // toastr.success('Xóa thành công.');
+    }).catch(function(error) {
+      toastr.error("Có lỗi xảy ra, vui lòng thử lại.");
+    });
+  }
+  
+  function updateIngredientInFood(index,id){
+    return new Promise((resolve,reject) => {
+      const db = firebase.firestore();
+      var Ref = db.collection("foodingre").doc(id);
+      return Ref.update({
+        amount : document.getElementById('amount-'+index).value,
+        ingreid : document.getElementById('in-'+index).value
+      })
+      .then(function() {
+        resolve();
+      })
+      .catch(function(error) {
+        toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+      });
+    });
+  }
+
+  function updateFood(){
+    const db = firebase.firestore();
+    var Ref = db.collection("food").doc(idtemp);
+    return Ref.update({
+      category_type : document.getElementById('update-categoryid').value,
+      name : document.getElementById('update-name').value,
+      img : document.getElementById('update-image').value === '' ? imgtemp : document.querySelector('#update-image').files[0].name,
+      step : document.getElementById('update-step').value.trim()
+    })
+    .then(function() {
+      toastr.success('Cập nhật thành công.');
+      $('#modal-updateFood').modal('hide');
+      if(document.getElementById('update-image').value != ''){
+        let imgname = document.querySelector('#update-image').files[0];
+        deleteimg(imgtemp);
+        uploadimg(imgname);
+      }
+    })
+    .catch(function(error) {
+      toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+      $('#modal-updateFood').modal('hide');
+    });
+  }
+
+</script>
+</body>
+</html>
